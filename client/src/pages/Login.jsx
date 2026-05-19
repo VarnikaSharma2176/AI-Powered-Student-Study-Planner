@@ -32,11 +32,12 @@ export default function Login() {
       toast.success("Login successful");
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      console.error("LOGIN ERROR:", error);
-      toast.error(error.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
+  console.error("LOGIN ERROR:", error);
+  console.error("LOGIN RESPONSE:", error.response?.data);
+  toast.error(error.response?.data?.message || error.message || "Login failed");
+} finally {
+  setLoading(false);
+}
   };
 
   return (

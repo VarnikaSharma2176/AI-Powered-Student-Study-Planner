@@ -33,11 +33,12 @@ export default function Register() {
       toast.success("Registration successful");
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      console.error("REGISTER ERROR:", error);
-      toast.error(error.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
-    }
+  console.error("REGISTER ERROR:", error);
+  console.error("REGISTER RESPONSE:", error.response?.data);
+  toast.error(error.response?.data?.message || error.message || "Registration failed");
+} finally {
+  setLoading(false);
+}
   };
 
   return (
