@@ -150,4 +150,45 @@ const deleteTask = async (req, res) => {
   }
 };
 
-export { createTask, getTasks, getTaskById, updateTask, deleteTask };
+const getTaskStats = async (req, res) => {
+  try {
+    const tasks = await Task.find({ user: req.user._id });
+
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(
+      (task) => task.status === "Completed"
+    ).length;
+    const pendingTasks = tasks.filter(
+      (task) => task.status !== "Completed"
+    ).length;
+
+    const overdueTasks = tasks.filter((task) => {
+      const deadline = new Date(task.deadline);
+      return task.status !== "Completed" && deadline < new Date();
+    }).length;
+
+    const completionRate =
+      totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+
+    res.json({
+      totalTasks,
+      completedTasks,
+      pendingTasks,
+      overdueTasks,
+      completionRate,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export {
+  createTask,
+  getTasks,
+  getTaskById,
+  updateTask,
+  deleteTask,
+  getTaskStats,
+};

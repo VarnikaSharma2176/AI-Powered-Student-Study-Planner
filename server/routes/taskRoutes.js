@@ -6,11 +6,14 @@ import {
   getTaskById,
   updateTask,
   deleteTask,
+  getTaskStats,
 } from "../controllers/taskController.js";
 
 const router = express.Router();
 
+router.get("/stats", protect, getTaskStats);
 router.route("/").post(protect, createTask).get(protect, getTasks);
+
 router
   .route("/:id")
   .get(protect, getTaskById)

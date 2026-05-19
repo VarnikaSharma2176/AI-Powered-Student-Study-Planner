@@ -1,16 +1,45 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
+import API from "../services/api";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [stats, setStats] = useState({
+    totalTasks: 0,
+    completedTasks: 0,
+    pendingTasks: 0,
+    overdueTasks: 0,
+    completionRate: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
 
   const handleLogout = () => {
     logout();
     toast.success("Logged out");
     navigate("/login");
   };
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const { data } = await API.get("/api/tasks/stats");
+        setStats(data);
+      } catch (error) {
+        console.error(error);
+        toast.error(error.response?.data?.message || "Failed to load stats");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
@@ -44,26 +73,47 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="mt-6 grid gap-4 md:grid-cols-4">
           <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
             <p className="text-sm text-slate-500">Total Tasks</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">0</h2>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+              {loading ? "..." : stats.totalTasks}
+            </h2>
           </div>
           <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
             <p className="text-sm text-slate-500">Completed</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">0</h2>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+              {loading ? "..." : stats.completedTasks}
+            </h2>
           </div>
           <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
             <p className="text-sm text-slate-500">Pending</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">0</h2>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+              {loading ? "..." : stats.pendingTasks}
+            </h2>
+          </div>
+          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+            <p className="text-sm text-slate-500">Completion Rate</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+              {loading ? "..." : `${stats.completionRate}%`}
+            </h2>
           </div>
         </div>
 
-        <div className="mt-6 rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
-          <h3 className="text-lg font-semibold text-slate-900">Next step</h3>
-          <p className="mt-2 text-sm text-slate-500">
-            We will connect this dashboard to real backend task data next.
-          </p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
+            <h3 className="text-lg font-semibold text-slate-900">Overdue Tasks</h3>
+            <p className="mt-2 text-sm text-slate-500">
+              {loading ? "Loading..." : `${stats.overdueTasks} tasks need attention.`}
+            </p>
+          </div>
+
+          <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
+            <h3 className="text-lg font-semibold text-slate-900">Next step</h3>
+            <p className="mt-2 text-sm text-slate-500">
+              We will add charts, productivity trends, and AI recommendations next.
+            </p>
+          </div>
         </div>
       </div>
     </div>
