@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import {
   createTask,
@@ -39,8 +40,8 @@ export default function Tasks() {
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const params = {};
 
+      const params = {};
       if (filters.search) params.search = filters.search;
       if (filters.status) params.status = filters.status;
       if (filters.subject) params.subject = filters.subject;
@@ -151,7 +152,7 @@ export default function Tasks() {
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
               <p className="text-sm text-slate-500">Task Management</p>
@@ -163,29 +164,38 @@ export default function Tasks() {
               </p>
             </div>
 
-            <button
-              onClick={clearForm}
-              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            >
-              New Task
-            </button>
+            <div className="flex gap-3">
+              <Link
+                to="/dashboard"
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
+              >
+                Dashboard
+              </Link>
+
+              <button
+                onClick={clearForm}
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
+              >
+                New Task
+              </button>
+            </div>
           </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
             <p className="text-sm text-slate-500">Total Tasks</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-900">
               {stats.total}
             </h2>
           </div>
-          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
             <p className="text-sm text-slate-500">Completed</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-900">
               {stats.completed}
             </h2>
           </div>
-          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
             <p className="text-sm text-slate-500">Pending</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-900">
               {stats.pending}
@@ -194,11 +204,12 @@ export default function Tasks() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
-          <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-slate-900">
                 {editingTaskId ? "Edit Task" : "Add Task"}
               </h2>
+
               {editingTaskId && (
                 <button
                   onClick={clearForm}
@@ -351,7 +362,7 @@ export default function Tasks() {
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
+            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
               <h2 className="text-xl font-semibold text-slate-900">Filters</h2>
 
               <div className="mt-4 grid gap-4 md:grid-cols-3">
@@ -387,7 +398,7 @@ export default function Tasks() {
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
+            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-slate-900">Task List</h2>
                 <button
