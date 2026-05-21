@@ -1,13 +1,54 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  LineChart,
+  Line,
+} from "recharts";
+import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
+import { getTasks } from "../services/taskService";
+
+const PIE_COLORS = ["#6366f1", "#22c55e", "#f59e0b", "#ef4444", "#06b6d4", "#a855f7"];
+
+function formatDate(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  return date.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function groupTasksByDate(tasks) {
+  const map = new Map();
+
+  tasks.forEach((task) => {
+    const key = task.createdAt ? formatDate(task.createdAt) : "Unknown";
+    map.set(key, (map.get(key) || 0) + 1);
+  });
+
+  return Array.from(map.entries()).map(([name, value]) => ({ name, value }));
+}
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const [tasks, setTasks] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [stats, setStats] = useState({
     totalTasks: 0,
     completedTasks: 0,
@@ -15,7 +56,6 @@ export default function Dashboard() {
     overdueTasks: 0,
     completionRate: 0,
   });
-
   const [loading, setLoading] = useState(true);
 
   const handleLogout = () => {
@@ -25,26 +65,71 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const { data } = await API.get("/api/tasks/stats");
-        setStats(data);
+
+        const [tasksResponse, statsResponse, recommendationsResponse] = await Promise.all([
+          getTasks(),
+          API.get("/api/tasks/stats"),
+          API.get("/api/recommendations"),
+        ]);
+
+        setTasks(tasksResponse);
+        setStats(statsResponse.data);
+        setRecommendations(recommendationsResponse.data);
       } catch (error) {
         console.error(error);
-        toast.error(error.response?.data?.message || "Failed to load stats");
+        toast.error(error.response?.data?.message || "Failed to load dashboard");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchStats();
+    fetchDashboardData();
   }, []);
+
+  const statusData = useMemo(() => {
+    return [
+      { name: "Completed", value: stats.completedTasks },
+      { name: "Pending", value: stats.pendingTasks },
+      { name: "Overdue", value: stats.overdueTasks },
+    ];
+  }, [stats]);
+
+  const subjectData = useMemo(() => {
+    const subjectMap = new Map();
+
+    tasks.forEach((task) => {
+      const subject = task.subject || "Unspecified";
+      subjectMap.set(subject, (subjectMap.get(subject) || 0) + 1);
+    });
+
+    return Array.from(subjectMap.entries()).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  }, [tasks]);
+
+  const timelineData = useMemo(() => groupTasksByDate(tasks), [tasks]);
+
+  const recentTasks = useMemo(() => {
+    return [...tasks]
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5);
+  }, [tasks]);
+
+  const upcomingTasks = useMemo(() => {
+    return [...tasks]
+      .filter((task) => task.status !== "Completed")
+      .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+      .slice(0, 3);
+  }, [tasks]);
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
+      <div className="mx-auto max-w-7xl space-y-6">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm text-slate-500">Welcome back</p>
@@ -52,7 +137,7 @@ export default function Dashboard() {
                 {user?.name || "Student"} Dashboard
               </h1>
               <p className="mt-2 text-sm text-slate-500">
-                Manage your study tasks, plans, and productivity.
+                Track tasks, productivity, and academic progress in one place.
               </p>
             </div>
 
@@ -73,26 +158,29 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+        <div className="grid gap-4 md:grid-cols-4">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
             <p className="text-sm text-slate-500">Total Tasks</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-900">
               {loading ? "..." : stats.totalTasks}
             </h2>
           </div>
-          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
             <p className="text-sm text-slate-500">Completed</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-900">
               {loading ? "..." : stats.completedTasks}
             </h2>
           </div>
-          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
             <p className="text-sm text-slate-500">Pending</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-900">
               {loading ? "..." : stats.pendingTasks}
             </h2>
           </div>
-          <div className="rounded-3xl bg-white p-5 shadow-soft border border-slate-100">
+
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
             <p className="text-sm text-slate-500">Completion Rate</p>
             <h2 className="mt-2 text-3xl font-semibold text-slate-900">
               {loading ? "..." : `${stats.completionRate}%`}
@@ -100,19 +188,217 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
-            <h3 className="text-lg font-semibold text-slate-900">Overdue Tasks</h3>
-            <p className="mt-2 text-sm text-slate-500">
-              {loading ? "Loading..." : `${stats.overdueTasks} tasks need attention.`}
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+            <h2 className="text-xl font-semibold text-slate-900">Task Status</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Completed, pending, and overdue task distribution
             </p>
+
+            <div className="mt-6 h-72">
+              {loading ? (
+                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                  Loading chart...
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={statusData}
+                      dataKey="value"
+                      nameKey="name"
+                      outerRadius={100}
+                      innerRadius={55}
+                      paddingAngle={4}
+                    >
+                      {statusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
+            </div>
           </div>
 
-          <div className="rounded-3xl bg-white p-6 shadow-soft border border-slate-100">
-            <h3 className="text-lg font-semibold text-slate-900">Next step</h3>
-            <p className="mt-2 text-sm text-slate-500">
-              We will add charts, productivity trends, and AI recommendations next.
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+            <h2 className="text-xl font-semibold text-slate-900">Subject Breakdown</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Number of tasks per subject
             </p>
+
+            <div className="mt-6 h-72">
+              {loading ? (
+                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                  Loading chart...
+                </div>
+              ) : subjectData.length === 0 ? (
+                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                  No subject data yet.
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={subjectData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="value" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+            <h2 className="text-xl font-semibold text-slate-900">Task Timeline</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Tasks created over time
+            </p>
+
+            <div className="mt-6 h-72">
+              {loading ? (
+                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                  Loading chart...
+                </div>
+              ) : timelineData.length === 0 ? (
+                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                  No timeline data yet.
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={timelineData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="value" strokeWidth={3} dot />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+            <h2 className="text-xl font-semibold text-slate-900">AI Recommendations</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Smart suggestions based on deadline, priority, and difficulty
+            </p>
+
+            <div className="mt-6 space-y-4">
+              {loading ? (
+                <p className="text-sm text-slate-500">Loading recommendations...</p>
+              ) : recommendations.length === 0 ? (
+                <p className="text-sm text-slate-500">No recommendations yet.</p>
+              ) : (
+                recommendations.map((item) => (
+                  <div
+                    key={item.id}
+                    className="rounded-2xl border border-slate-200 p-4"
+                  >
+                    <h3 className="font-semibold text-slate-900">{item.title}</h3>
+                    <p className="mt-1 text-sm text-slate-500">
+                      {item.taskTitle ? `${item.taskTitle} • ` : ""}
+                      {item.subject || "General"}
+                    </p>
+                    <p className="mt-2 text-sm text-slate-600">{item.reason}</p>
+                    <p className="mt-2 text-sm font-medium text-indigo-600">
+                      {item.action}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">Upcoming Deadlines</h2>
+              <p className="mt-1 text-sm text-slate-500">
+                The next tasks that need attention
+              </p>
+            </div>
+
+            <Link
+              to="/tasks"
+              className="text-sm font-medium text-indigo-600 hover:underline"
+            >
+              View all
+            </Link>
+          </div>
+
+          <div className="mt-6 space-y-4">
+            {loading ? (
+              <p className="text-sm text-slate-500">Loading upcoming tasks...</p>
+            ) : upcomingTasks.length === 0 ? (
+              <p className="text-sm text-slate-500">No upcoming tasks.</p>
+            ) : (
+              upcomingTasks.map((task) => (
+                <div
+                  key={task._id}
+                  className="rounded-2xl border border-slate-200 p-4"
+                >
+                  <h3 className="font-semibold text-slate-900">{task.title}</h3>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {task.subject} • {task.priority} • {task.status}
+                  </p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Deadline: {formatDate(task.deadline)}
+                  </p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-slate-900">Recent Tasks</h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Latest tasks from your planner
+              </p>
+            </div>
+
+            <Link
+              to="/tasks"
+              className="text-sm font-medium text-indigo-600 hover:underline"
+            >
+              View all
+            </Link>
+          </div>
+
+          <div className="mt-6 space-y-4">
+            {loading ? (
+              <p className="text-sm text-slate-500">Loading recent tasks...</p>
+            ) : recentTasks.length === 0 ? (
+              <p className="text-sm text-slate-500">No tasks added yet.</p>
+            ) : (
+              recentTasks.map((task) => (
+                <div
+                  key={task._id}
+                  className="rounded-2xl border border-slate-200 p-4"
+                >
+                  <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <h3 className="font-semibold text-slate-900">{task.title}</h3>
+                      <p className="mt-1 text-sm text-slate-500">
+                        {task.subject} • {task.priority} • {task.status}
+                      </p>
+                    </div>
+                    <p className="text-sm text-slate-500">
+                      {formatDate(task.deadline)}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
