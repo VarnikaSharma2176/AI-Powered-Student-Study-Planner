@@ -305,14 +305,6 @@ Backend Deployment:
 Database:
 - MongoDB Atlas
 
---------------------------------------------------
-
-SCREENSHOTS
-
-Add screenshots here after deployment:
-- screenshots/dashboard.png
-- screenshots/tasks.png
-- screenshots/login.png
 
 --------------------------------------------------
 
