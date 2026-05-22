@@ -150,16 +150,16 @@ export default function Tasks() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-      <div className="mx-auto max-w-7xl space-y-6">
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <div className="mx-auto max-w-7xl space-y-6 p-4 md:p-8">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
-              <p className="text-sm text-slate-500">Task Management</p>
-              <h1 className="text-3xl font-semibold text-slate-900">
+              <p className="text-sm text-slate-500 dark:text-slate-400">Task Management</p>
+              <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">
                 Your Study Tasks
               </h1>
-              <p className="mt-2 text-sm text-slate-500">
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                 Create, update, and track study tasks synced with MongoDB.
               </p>
             </div>
@@ -167,14 +167,14 @@ export default function Tasks() {
             <div className="flex gap-3">
               <Link
                 to="/dashboard"
-                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 Dashboard
               </Link>
 
               <button
                 onClick={clearForm}
-                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 New Task
               </button>
@@ -183,37 +183,37 @@ export default function Tasks() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
-            <p className="text-sm text-slate-500">Total Tasks</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Total Tasks</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
               {stats.total}
             </h2>
           </div>
-          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
-            <p className="text-sm text-slate-500">Completed</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Completed</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
               {stats.completed}
             </h2>
           </div>
-          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
-            <p className="text-sm text-slate-500">Pending</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Pending</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
               {stats.pending}
             </h2>
           </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-slate-900">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
                 {editingTaskId ? "Edit Task" : "Add Task"}
               </h2>
 
               {editingTaskId && (
                 <button
                   onClick={clearForm}
-                  className="text-sm font-medium text-indigo-600 hover:underline"
+                  className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-300"
                 >
                   Cancel edit
                 </button>
@@ -222,7 +222,7 @@ export default function Tasks() {
 
             <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                   Title
                 </label>
                 <input
@@ -230,14 +230,14 @@ export default function Tasks() {
                   name="title"
                   value={form.title}
                   onChange={handleChange}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   placeholder="Task title"
                   required
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                   Subject
                 </label>
                 <input
@@ -245,14 +245,14 @@ export default function Tasks() {
                   name="subject"
                   value={form.subject}
                   onChange={handleChange}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   placeholder="Subject name"
                   required
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                   Description
                 </label>
                 <textarea
@@ -260,14 +260,14 @@ export default function Tasks() {
                   value={form.description}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   placeholder="Task description"
                 />
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                     Deadline
                   </label>
                   <input
@@ -275,13 +275,13 @@ export default function Tasks() {
                     name="deadline"
                     value={form.deadline}
                     onChange={handleChange}
-                    className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                     Estimated Hours
                   </label>
                   <input
@@ -290,7 +290,7 @@ export default function Tasks() {
                     value={form.estimatedHours}
                     onChange={handleChange}
                     min="1"
-                    className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                     placeholder="1"
                   />
                 </div>
@@ -298,14 +298,14 @@ export default function Tasks() {
 
               <div className="grid gap-4 md:grid-cols-3">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                     Difficulty
                   </label>
                   <select
                     name="difficulty"
                     value={form.difficulty}
                     onChange={handleChange}
-                    className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   >
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
@@ -314,14 +314,14 @@ export default function Tasks() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                     Priority
                   </label>
                   <select
                     name="priority"
                     value={form.priority}
                     onChange={handleChange}
-                    className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   >
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
@@ -331,14 +331,14 @@ export default function Tasks() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                     Status
                   </label>
                   <select
                     name="status"
                     value={form.status}
                     onChange={handleChange}
-                    className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                   >
                     <option value="Pending">Pending</option>
                     <option value="In Progress">In Progress</option>
@@ -362,8 +362,8 @@ export default function Tasks() {
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
-              <h2 className="text-xl font-semibold text-slate-900">Filters</h2>
+            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Filters</h2>
 
               <div className="mt-4 grid gap-4 md:grid-cols-3">
                 <input
@@ -372,14 +372,14 @@ export default function Tasks() {
                   value={filters.search}
                   onChange={handleFilterChange}
                   placeholder="Search tasks"
-                  className="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                 />
 
                 <select
                   name="status"
                   value={filters.status}
                   onChange={handleFilterChange}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                 >
                   <option value="">All Status</option>
                   <option value="Pending">Pending</option>
@@ -393,17 +393,17 @@ export default function Tasks() {
                   value={filters.subject}
                   onChange={handleFilterChange}
                   placeholder="Filter by subject"
-                  className="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500"
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                 />
               </div>
             </div>
 
-            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-900">Task List</h2>
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Task List</h2>
                 <button
                   onClick={fetchTasks}
-                  className="text-sm font-medium text-indigo-600 hover:underline"
+                  className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-300"
                 >
                   Refresh
                 </button>
@@ -411,44 +411,44 @@ export default function Tasks() {
 
               <div className="mt-4 space-y-4">
                 {loading ? (
-                  <p className="text-sm text-slate-500">Loading tasks...</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Loading tasks...</p>
                 ) : tasks.length === 0 ? (
-                  <p className="text-sm text-slate-500">No tasks found.</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">No tasks found.</p>
                 ) : (
                   tasks.map((task) => (
                     <div
                       key={task._id}
-                      className="rounded-3xl border border-slate-200 p-4"
+                      className="rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
                     >
                       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                         <div>
-                          <h3 className="text-lg font-semibold text-slate-900">
+                          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                             {task.title}
                           </h3>
-                          <p className="mt-1 text-sm text-slate-500">
+                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                             {task.subject} • {task.priority} • {task.difficulty}
                           </p>
-                          <p className="mt-2 text-sm text-slate-600">
+                          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                             {task.description || "No description"}
                           </p>
-                          <p className="mt-2 text-xs text-slate-500">
+                          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
                             Deadline: {formatDate(task.deadline)}
                           </p>
                         </div>
 
                         <div className="flex flex-wrap gap-2">
-                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-slate-700 dark:text-slate-200">
                             {task.status}
                           </span>
                           <button
                             onClick={() => handleEdit(task)}
-                            className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                            className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => handleDelete(task._id)}
-                            className="rounded-full border border-rose-200 px-3 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50"
+                            className="rounded-full border border-rose-200 px-3 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:border-rose-900 dark:text-rose-300 dark:hover:bg-rose-950"
                           >
                             Delete
                           </button>

@@ -1,6 +1,13 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { BookOpen, LayoutDashboard, ListTodo, LogOut, Sparkles } from "lucide-react";
+import {
+  BookOpen,
+  LayoutDashboard,
+  ListTodo,
+  LogOut,
+  Sparkles,
+  Brain,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
 
@@ -48,6 +55,11 @@ export default function AppLayout() {
           <NavLink to="/tasks" className={navLinkClass}>
             <ListTodo size={18} />
             Tasks
+          </NavLink>
+
+          <NavLink to="/agent" className={navLinkClass}>
+            <Brain size={18} />
+            StudyFlow Agent
           </NavLink>
         </nav>
 

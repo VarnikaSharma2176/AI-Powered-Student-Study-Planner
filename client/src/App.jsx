@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
+import StudyFlow from "./pages/StudyFlow";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
 
@@ -12,8 +13,10 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="rounded-2xl bg-white px-6 py-4 shadow-soft">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="rounded-2xl bg-white px-6 py-4 shadow-soft dark:bg-slate-900 dark:text-white">
+          Loading...
+        </div>
       </div>
     );
   }
@@ -40,6 +43,7 @@ export default function App() {
         >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
+          <Route path="/agent" element={<StudyFlow />} />
         </Route>
       </Routes>
     </BrowserRouter>

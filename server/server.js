@@ -5,6 +5,8 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import recommendationRoutes from "./routes/recommendationRoutes.js";
+import agentRoutes from "./routes/agentRoutes.js";
+
 dotenv.config();
 
 connectDB();
@@ -13,7 +15,7 @@ const app = express();
 
 const corsOptions = {
   origin: "http://localhost:5173",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 };
 
@@ -22,13 +24,14 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({
-    message: "AI Study Planner API Running",
+    message: "StudyFlow AI Agent API Running",
   });
 });
 
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/recommendations", recommendationRoutes);
+app.use("/api/agent", agentRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

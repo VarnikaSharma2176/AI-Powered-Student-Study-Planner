@@ -127,16 +127,16 @@ export default function Dashboard() {
   }, [tasks]);
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-      <div className="mx-auto max-w-7xl space-y-6">
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <div className="mx-auto max-w-7xl space-y-6 p-4 md:p-8">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-sm text-slate-500">Welcome back</p>
-              <h1 className="text-3xl font-semibold text-slate-900">
+              <p className="text-sm text-slate-500 dark:text-slate-400">Welcome back</p>
+              <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">
                 {user?.name || "Student"} Dashboard
               </h1>
-              <p className="mt-2 text-sm text-slate-500">
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                 Track tasks, productivity, and academic progress in one place.
               </p>
             </div>
@@ -150,7 +150,7 @@ export default function Dashboard() {
               </Link>
               <button
                 onClick={handleLogout}
-                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 Logout
               </button>
@@ -159,45 +159,45 @@ export default function Dashboard() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-4">
-          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
-            <p className="text-sm text-slate-500">Total Tasks</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Total Tasks</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
               {loading ? "..." : stats.totalTasks}
             </h2>
           </div>
 
-          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
-            <p className="text-sm text-slate-500">Completed</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Completed</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
               {loading ? "..." : stats.completedTasks}
             </h2>
           </div>
 
-          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
-            <p className="text-sm text-slate-500">Pending</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Pending</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
               {loading ? "..." : stats.pendingTasks}
             </h2>
           </div>
 
-          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft">
-            <p className="text-sm text-slate-500">Completion Rate</p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Completion Rate</p>
+            <h2 className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">
               {loading ? "..." : `${stats.completionRate}%`}
             </h2>
           </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
-            <h2 className="text-xl font-semibold text-slate-900">Task Status</h2>
-            <p className="mt-1 text-sm text-slate-500">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Task Status</h2>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Completed, pending, and overdue task distribution
             </p>
 
             <div className="mt-6 h-72">
               {loading ? (
-                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                <div className="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
                   Loading chart...
                 </div>
               ) : (
@@ -212,7 +212,10 @@ export default function Dashboard() {
                       paddingAngle={4}
                     >
                       {statusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={PIE_COLORS[index % PIE_COLORS.length]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -223,19 +226,19 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
-            <h2 className="text-xl font-semibold text-slate-900">Subject Breakdown</h2>
-            <p className="mt-1 text-sm text-slate-500">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Subject Breakdown</h2>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Number of tasks per subject
             </p>
 
             <div className="mt-6 h-72">
               {loading ? (
-                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                <div className="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
                   Loading chart...
                 </div>
               ) : subjectData.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                <div className="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
                   No subject data yet.
                 </div>
               ) : (
@@ -254,19 +257,19 @@ export default function Dashboard() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
-            <h2 className="text-xl font-semibold text-slate-900">Task Timeline</h2>
-            <p className="mt-1 text-sm text-slate-500">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Task Timeline</h2>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Tasks created over time
             </p>
 
             <div className="mt-6 h-72">
               {loading ? (
-                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                <div className="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
                   Loading chart...
                 </div>
               ) : timelineData.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                <div className="flex h-full items-center justify-center text-sm text-slate-500 dark:text-slate-400">
                   No timeline data yet.
                 </div>
               ) : (
@@ -283,30 +286,30 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
-            <h2 className="text-xl font-semibold text-slate-900">AI Recommendations</h2>
-            <p className="mt-1 text-sm text-slate-500">
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">AI Recommendations</h2>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Smart suggestions based on deadline, priority, and difficulty
             </p>
 
             <div className="mt-6 space-y-4">
               {loading ? (
-                <p className="text-sm text-slate-500">Loading recommendations...</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Loading recommendations...</p>
               ) : recommendations.length === 0 ? (
-                <p className="text-sm text-slate-500">No recommendations yet.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">No recommendations yet.</p>
               ) : (
                 recommendations.map((item) => (
                   <div
                     key={item.id}
-                    className="rounded-2xl border border-slate-200 p-4"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
                   >
-                    <h3 className="font-semibold text-slate-900">{item.title}</h3>
-                    <p className="mt-1 text-sm text-slate-500">
+                    <h3 className="font-semibold text-slate-900 dark:text-white">{item.title}</h3>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                       {item.taskTitle ? `${item.taskTitle} • ` : ""}
                       {item.subject || "General"}
                     </p>
-                    <p className="mt-2 text-sm text-slate-600">{item.reason}</p>
-                    <p className="mt-2 text-sm font-medium text-indigo-600">
+                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{item.reason}</p>
+                    <p className="mt-2 text-sm font-medium text-indigo-600 dark:text-indigo-300">
                       {item.action}
                     </p>
                   </div>
@@ -316,18 +319,18 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900">Upcoming Deadlines</h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Upcoming Deadlines</h2>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 The next tasks that need attention
               </p>
             </div>
 
             <Link
               to="/tasks"
-              className="text-sm font-medium text-indigo-600 hover:underline"
+              className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-300"
             >
               View all
             </Link>
@@ -335,20 +338,20 @@ export default function Dashboard() {
 
           <div className="mt-6 space-y-4">
             {loading ? (
-              <p className="text-sm text-slate-500">Loading upcoming tasks...</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Loading upcoming tasks...</p>
             ) : upcomingTasks.length === 0 ? (
-              <p className="text-sm text-slate-500">No upcoming tasks.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">No upcoming tasks.</p>
             ) : (
               upcomingTasks.map((task) => (
                 <div
                   key={task._id}
-                  className="rounded-2xl border border-slate-200 p-4"
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
                 >
-                  <h3 className="font-semibold text-slate-900">{task.title}</h3>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <h3 className="font-semibold text-slate-900 dark:text-white">{task.title}</h3>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     {task.subject} • {task.priority} • {task.status}
                   </p>
-                  <p className="mt-2 text-sm text-slate-600">
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                     Deadline: {formatDate(task.deadline)}
                   </p>
                 </div>
@@ -357,18 +360,18 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900">Recent Tasks</h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Recent Tasks</h2>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Latest tasks from your planner
               </p>
             </div>
 
             <Link
               to="/tasks"
-              className="text-sm font-medium text-indigo-600 hover:underline"
+              className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-300"
             >
               View all
             </Link>
@@ -376,23 +379,23 @@ export default function Dashboard() {
 
           <div className="mt-6 space-y-4">
             {loading ? (
-              <p className="text-sm text-slate-500">Loading recent tasks...</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Loading recent tasks...</p>
             ) : recentTasks.length === 0 ? (
-              <p className="text-sm text-slate-500">No tasks added yet.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">No tasks added yet.</p>
             ) : (
               recentTasks.map((task) => (
                 <div
                   key={task._id}
-                  className="rounded-2xl border border-slate-200 p-4"
+                  className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
                 >
                   <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                     <div>
-                      <h3 className="font-semibold text-slate-900">{task.title}</h3>
-                      <p className="mt-1 text-sm text-slate-500">
+                      <h3 className="font-semibold text-slate-900 dark:text-white">{task.title}</h3>
+                      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                         {task.subject} • {task.priority} • {task.status}
                       </p>
                     </div>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       {formatDate(task.deadline)}
                     </p>
                   </div>
