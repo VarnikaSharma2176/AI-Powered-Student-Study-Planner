@@ -14,3 +14,15 @@ export const getAgentInsights = async () => {
   const { data } = await API.get("/api/agent/insights");
   return data;
 };
+
+export const updateStudySessionStatus = async (sessionId, status) => {
+  const { data } = await API.patch(`/api/agent/session/${sessionId}/status`, {
+    status,
+  });
+  return data;
+};
+
+export const replanStudyPlan = async () => {
+  const { data } = await API.post("/api/agent/replan");
+  return data;
+};

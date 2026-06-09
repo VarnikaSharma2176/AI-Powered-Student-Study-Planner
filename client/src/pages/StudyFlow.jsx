@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import {
   generateStudyPlan,
   getLatestStudyPlan,
+  replanStudyPlan,
+  updateStudySessionStatus,
 } from "../services/agentService";
 
 const initialForm = {
@@ -14,21 +16,49 @@ const initialForm = {
   syllabusText: "",
 };
 
+function formatDate(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  return date.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export default function StudyFlow() {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
-  const [latestPlan, setLatestPlan] = useState(null);
+  const [planLoading, setPlanLoading] = useState(true);
+  const [studyData, setStudyData] = useState({
+    plan: null,
+    planDoc: null,
+    sessions: [],
+  });
+
+  const loadLatestPlan = async () => {
+    try {
+      setPlanLoading(true);
+      const data = await getLatestStudyPlan();
+      setStudyData({
+        plan: data.plan || null,
+        planDoc: data.planDoc || null,
+        sessions: data.sessions || [],
+      });
+    } catch (error) {
+      console.log("No latest plan found yet.");
+      setStudyData({
+        plan: null,
+        planDoc: null,
+        sessions: [],
+      });
+    } finally {
+      setPlanLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadLatestPlan = async () => {
-      try {
-        const data = await getLatestStudyPlan();
-        setLatestPlan(data.plan);
-      } catch (error) {
-        console.log("No latest plan found yet.");
-      }
-    };
-
     loadLatestPlan();
   }, []);
 
@@ -66,7 +96,11 @@ export default function StudyFlow() {
       });
 
       toast.success("Study plan generated successfully");
-      setLatestPlan(data.plan);
+      setStudyData({
+        plan: data.plan || null,
+        planDoc: data.planDoc || null,
+        sessions: data.sessions || [],
+      });
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Failed to generate plan");
@@ -74,6 +108,46 @@ export default function StudyFlow() {
       setLoading(false);
     }
   };
+
+  const stats = useMemo(() => {
+    const sessions = studyData.sessions || [];
+    return {
+      total: sessions.length,
+      completed: sessions.filter((session) => session.status === "completed").length,
+      missed: sessions.filter((session) => session.status === "missed").length,
+      pending: sessions.filter((session) => session.status === "pending").length,
+    };
+  }, [studyData.sessions]);
+
+  const handleSessionStatusChange = async (sessionId, status) => {
+    try {
+      await updateStudySessionStatus(sessionId, status);
+      toast.success(`Session marked as ${status}`);
+      await loadLatestPlan();
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to update session");
+    }
+  };
+
+  const handleReplan = async () => {
+    try {
+      const data = await replanStudyPlan();
+      toast.success("Plan recalculated successfully");
+      setStudyData({
+        plan: data.plan || studyData.plan,
+        planDoc: data.planDoc || studyData.planDoc,
+        sessions: data.sessions || [],
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to recalculate plan");
+    }
+  };
+
+  const plan = studyData.plan;
+  const planDoc = studyData.planDoc;
+  const sessions = studyData.sessions || [];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
@@ -84,7 +158,7 @@ export default function StudyFlow() {
             Generate your adaptive study plan
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-500 dark:text-slate-400">
-            Enter your exam details, subjects, weak topics, and study hours. The agent will create a structured plan.
+            Enter your exam details, subjects, weak topics, and study hours. The agent will create a structured plan and sessions.
           </p>
         </div>
 
@@ -192,11 +266,26 @@ export default function StudyFlow() {
 
           <div className="space-y-6">
             <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-                Generated plan
-              </h2>
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+                  Generated plan
+                </h2>
 
-              {!latestPlan ? (
+                {plan && (
+                  <button
+                    onClick={handleReplan}
+                    className="rounded-2xl border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-50 dark:border-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-950"
+                  >
+                    Recalculate plan
+                  </button>
+                )}
+              </div>
+
+              {planLoading ? (
+                <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                  Loading latest plan...
+                </p>
+              ) : !plan ? (
                 <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
                   No study plan generated yet.
                 </p>
@@ -205,27 +294,32 @@ export default function StudyFlow() {
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
                     <p className="text-sm text-slate-500 dark:text-slate-400">Title</p>
                     <h3 className="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
-                      {latestPlan.title}
+                      {planDoc?.title || plan.title}
                     </h3>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                      Exam date: {planDoc?.examDate ? formatDate(planDoc.examDate) : "-"}
+                    </p>
                   </div>
 
                   <div className="grid gap-4 md:grid-cols-3">
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
                       <p className="text-sm text-slate-500 dark:text-slate-400">Total Days</p>
                       <h4 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
-                        {latestPlan.plan?.totalDays || "-"}
+                        {plan.totalDays || "-"}
                       </h4>
                     </div>
+
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
                       <p className="text-sm text-slate-500 dark:text-slate-400">Daily Hours</p>
                       <h4 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
-                        {latestPlan.plan?.dailyStudyHours || "-"}
+                        {plan.dailyStudyHours || "-"}
                       </h4>
                     </div>
+
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
                       <p className="text-sm text-slate-500 dark:text-slate-400">Weak Topics</p>
                       <h4 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
-                        {latestPlan.plan?.summary?.weakTopicsCount ?? 0}
+                        {plan.summary?.weakTopicsCount ?? 0}
                       </h4>
                     </div>
                   </div>
@@ -235,7 +329,7 @@ export default function StudyFlow() {
                       Subject-wise plan
                     </p>
                     <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-                      {(latestPlan.plan?.subjectWisePlan || []).map((item, index) => (
+                      {(plan.subjectWisePlan || []).map((item, index) => (
                         <li key={index} className="flex items-center justify-between">
                           <span>{item.subject}</span>
                           <span>{item.priority}</span>
@@ -249,7 +343,7 @@ export default function StudyFlow() {
                       Day-wise preview
                     </p>
                     <div className="mt-3 space-y-3">
-                      {(latestPlan.plan?.dayWisePlan || []).slice(0, 3).map((day) => (
+                      {(plan.dayWisePlan || []).slice(0, 3).map((day) => (
                         <div
                           key={day.day}
                           className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
@@ -273,6 +367,95 @@ export default function StudyFlow() {
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+                Study sessions
+              </h2>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Mark sessions completed or missed. Missed sessions will be rescheduled.
+              </p>
+
+              <div className="mt-4 grid gap-4 md:grid-cols-4">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Total</p>
+                  <h4 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
+                    {stats.total}
+                  </h4>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Completed</p>
+                  <h4 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
+                    {stats.completed}
+                  </h4>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Pending</p>
+                  <h4 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
+                    {stats.pending}
+                  </h4>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Missed</p>
+                  <h4 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">
+                    {stats.missed}
+                  </h4>
+                </div>
+              </div>
+
+              <div className="mt-6 space-y-4">
+                {!sessions.length ? (
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    No sessions available yet.
+                  </p>
+                ) : (
+                  sessions.map((session) => (
+                    <div
+                      key={session._id}
+                      className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800"
+                    >
+                      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                        <div>
+                          <h3 className="font-semibold text-slate-900 dark:text-white">
+                            {session.title}
+                          </h3>
+                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            {session.subject} • {session.focus} • {session.durationMinutes} min
+                          </p>
+                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            Planned: {formatDate(session.plannedDate)}
+                          </p>
+                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            Status: {session.status}
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            onClick={() => handleSessionStatusChange(session._id, "completed")}
+                            className="rounded-full border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:border-emerald-900 dark:text-emerald-300 dark:hover:bg-emerald-950"
+                          >
+                            Completed
+                          </button>
+                          <button
+                            onClick={() => handleSessionStatusChange(session._id, "missed")}
+                            className="rounded-full border border-amber-200 px-3 py-1 text-xs font-medium text-amber-700 hover:bg-amber-50 dark:border-amber-900 dark:text-amber-300 dark:hover:bg-amber-950"
+                          >
+                            Missed
+                          </button>
+                          <button
+                            onClick={() => handleSessionStatusChange(session._id, "pending")}
+                            className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700"
+                          >
+                            Reset
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>
