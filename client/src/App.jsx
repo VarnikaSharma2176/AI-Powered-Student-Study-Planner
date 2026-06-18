@@ -7,7 +7,7 @@ import Tasks from "./pages/Tasks";
 import StudyFlow from "./pages/StudyFlow";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
-
+import RevisionAssistant from "./pages/RevisionAssistant";
 export default function App() {
   const { user, loading } = useAuth();
 
@@ -44,6 +44,8 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/agent" element={<StudyFlow />} />
+          <Route path="/revision" element={<RevisionAssistant />}
+/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -7,6 +7,7 @@ import {
   LogOut,
   Sparkles,
   Brain,
+  RefreshCw,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
@@ -61,6 +62,10 @@ export default function AppLayout() {
             <Brain size={18} />
             StudyFlow Agent
           </NavLink>
+          <NavLink to="/revision" className={navLinkClass}>
+            <RefreshCw size={18} />
+            Revision Assistant
+        </NavLink>
         </nav>
 
         <div className="mt-auto rounded-2xl bg-slate-900 p-5 text-white dark:bg-slate-800">
