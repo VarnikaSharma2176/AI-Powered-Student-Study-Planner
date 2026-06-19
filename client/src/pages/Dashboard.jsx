@@ -18,6 +18,8 @@ import {
 } from "recharts";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
+import { getAgentInsights } from "../services/agentService";
+import AgentInsightCards from "../components/AgentInsightCards";
 import { getTasks } from "../services/taskService";
 
 const PIE_COLORS = ["#6366f1", "#22c55e", "#f59e0b", "#ef4444", "#06b6d4", "#a855f7"];
@@ -57,6 +59,8 @@ export default function Dashboard() {
     completionRate: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [agentInsights, setAgentInsights] = useState(null);
+const [agentLoading, setAgentLoading] = useState(true);
 
   const handleLogout = () => {
     logout();
@@ -69,15 +73,24 @@ export default function Dashboard() {
       try {
         setLoading(true);
 
-        const [tasksResponse, statsResponse, recommendationsResponse] = await Promise.all([
-          getTasks(),
-          API.get("/api/tasks/stats"),
-          API.get("/api/recommendations"),
-        ]);
+        const [
+            tasksResponse,
+            statsResponse,
+            recommendationsResponse,
+            insightsResponse,
+          ] = await Promise.all([
+            getTasks(),
+            API.get("/api/tasks/stats"),
+            API.get("/api/recommendations"),
+            getAgentInsights(),
+          ]);
 
         setTasks(tasksResponse);
         setStats(statsResponse.data);
         setRecommendations(recommendationsResponse.data);
+
+        setAgentInsights(insightsResponse);
+        setAgentLoading(false);
       } catch (error) {
         console.error(error);
         toast.error(error.response?.data?.message || "Failed to load dashboard");
@@ -157,7 +170,10 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
+        <AgentInsightCards
+        insights={agentInsights}
+        loading={agentLoading}
+        />
         <div className="grid gap-4 md:grid-cols-4">
           <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900">
             <p className="text-sm text-slate-500 dark:text-slate-400">Total Tasks</p>
