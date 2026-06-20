@@ -26,3 +26,11 @@ export const replanStudyPlan = async () => {
   const { data } = await API.post("/api/agent/replan");
   return data;
 };
+
+export const chatWithAgent = async (prompt) => {
+  const { data } = await API.post("/api/agent/chat", {
+    prompt,
+  });
+
+  return data;
+};

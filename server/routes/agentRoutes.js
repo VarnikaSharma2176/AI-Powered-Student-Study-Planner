@@ -9,6 +9,7 @@ import {
   getRevisionLogs,
   getRevisionSuggestions,
   markRevisionComplete,
+  chatWithAgent,
 } from "../controllers/agentController.js";
 
 import protect from "../middleware/authMiddleware.js";
@@ -48,6 +49,12 @@ router.post(
   "/replan",
   protect,
   replanStudyPlan
+);
+
+router.post(
+  "/chat",
+  protect,
+  chatWithAgent
 );
 
 /*

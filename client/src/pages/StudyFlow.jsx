@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { chatWithAgent } from "../services/agentService";
 import { toast } from "react-hot-toast";
 import {
   generateStudyPlan,
@@ -148,7 +149,38 @@ export default function StudyFlow() {
   const plan = studyData.plan;
   const planDoc = studyData.planDoc;
   const sessions = studyData.sessions || [];
+  const [prompt, setPrompt] = useState("");
+const [messages, setMessages] = useState([]);
+const [chatLoading, setChatLoading] = useState(false);
+  const handleSend = async () => {
+  if (!prompt.trim()) return;
 
+  const userMessage = {
+    role: "user",
+    text: prompt,
+  };
+
+  setMessages((prev) => [...prev, userMessage]);
+  setChatLoading(true);
+
+  try {
+    const res = await chatWithAgent(prompt);
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        text: res.response,
+      },
+    ]);
+  } catch (err) {
+    console.log(err);
+    toast.error("Failed to get AI response");
+  } finally {
+    setPrompt("");
+    setChatLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <div className="mx-auto max-w-7xl p-4 md:p-8">
@@ -457,6 +489,52 @@ export default function StudyFlow() {
                 )}
               </div>
             </div>
+          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+  <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+    StudyFlow AI Assistant
+  </h2>
+
+  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+    Ask anything about your studies, revision, timetable or exam preparation.
+  </p>
+
+  <div className="mt-6 space-y-4 max-h-96 overflow-y-auto">
+    {messages.map((message, index) => (
+      <div
+        key={index}
+        className={
+          message.role === "user"
+            ? "rounded-2xl bg-indigo-600 p-4 text-white"
+            : "rounded-2xl bg-slate-100 p-4 dark:bg-slate-800"
+        }
+      >
+        {message.text}
+      </div>
+    ))}
+
+    {chatLoading && (
+      <div className="rounded-2xl bg-slate-100 p-4 dark:bg-slate-800">
+        Thinking...
+      </div>
+    )}
+  </div>
+
+  <div className="mt-6 flex gap-3">
+    <input
+      value={prompt}
+      onChange={(e) => setPrompt(e.target.value)}
+      placeholder="Ask StudyFlow AI anything..."
+      className="flex-1 rounded-2xl border border-slate-200 px-4 py-3 dark:border-slate-700 dark:bg-slate-900"
+    />
+
+    <button
+      onClick={handleSend}
+      className="rounded-2xl bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700"
+    >
+      Send
+    </button>
+  </div>
+</div>
           </div>
         </div>
       </div>

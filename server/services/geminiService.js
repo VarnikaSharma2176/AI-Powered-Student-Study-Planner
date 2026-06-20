@@ -1,19 +1,25 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 export const generateAIResponse = async (prompt) => {
   try {
+    // Debug: Check whether the API key is loaded
+    console.log("Gemini Key:", process.env.GEMINI_API_KEY);
+
+    // Create Gemini client after environment variables are loaded
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+    // Select Gemini model
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
     });
 
+    // Generate response
     const result = await model.generateContent(prompt);
 
+    // Return AI text
     return result.response.text();
-  } catch (err) {
-    console.log(err);
-
-    throw err;
+  } catch (error) {
+    console.error("Gemini Error:", error);
+    throw new Error("Failed to generate AI response.");
   }
 };

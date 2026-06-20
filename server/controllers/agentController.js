@@ -3,6 +3,7 @@ import StudySession from "../models/StudySession.js";
 import RevisionLog from "../models/RevisionLog.js";
 
 import { generateStudyPlan } from "../services/plannerService.js";
+import { generateAIResponse } from "../services/geminiService.js";
 
 import {
   buildSessionsFromPlan,
@@ -781,6 +782,35 @@ export const markRevisionComplete = async (req, res) => {
   }
 };
 
+/*
+|-------------------------------------------------------------------------
+| AI Integration
+|--------------------------------------------------------------------------
+*/
+export const chatWithAgent = async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({
+        message: "Prompt is required",
+      });
+    }
+
+    const response = await generateAIResponse(prompt);
+
+    res.json({
+      success: true,
+      response,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to generate AI response",
+    });
+  }
+};
 /*
 |--------------------------------------------------------------------------
 | End of File
