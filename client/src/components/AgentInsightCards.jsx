@@ -42,16 +42,18 @@ export default function AgentInsightCards({
       description: "Topics being tracked",
     },
     {
-      title: "Learning Trend",
-      value:
-        insights?.averageMemoryScore >= 75
-          ? "Improving"
-          : insights?.averageMemoryScore >= 50
-          ? "Stable"
-          : "Needs Focus",
-      icon: TrendingUp,
-      description: "Current learning progress",
-    },
+  title: "Learning Trend",
+  value:
+    (insights?.totalRevisionTopics ?? 0) === 0
+      ? "Getting Started"
+      : insights?.averageMemoryScore >= 75
+      ? "Improving"
+      : insights?.averageMemoryScore >= 50
+      ? "Stable"
+      : "Needs Focus",
+  icon: TrendingUp,
+  description: "Current learning progress",
+},
   ];
 
   return (
