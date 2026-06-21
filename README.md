@@ -1,336 +1,534 @@
-# AI-Powered Student Study Planner and Productivity Management System
+# 🎓 StudyFlow AI Agent
 
-A full-stack AI-assisted productivity platform designed to help students manage study schedules, organize academic tasks, improve time management, and track learning productivity through intelligent recommendations and analytics.
+An AI-powered academic productivity platform that helps students plan, organize, track, and optimize their studies through intelligent scheduling, revision management, analytics, and AI assistance.
 
---------------------------------------------------
+---
 
-PROJECT OVERVIEW
+# 📖 Overview
 
-The AI-Powered Student Study Planner is a modern MERN stack web application that combines task management, productivity analytics, and AI-driven study recommendations into a single platform.
+StudyFlow AI Agent is designed to solve one of the biggest challenges faced by students: managing studies efficiently while staying consistent.
 
-The system allows students to:
-- manage academic tasks
-- organize study schedules
-- monitor productivity
-- analyze progress
-- receive AI-based study recommendations
-- track deadlines and completion rates
+Most students struggle with:
 
-The application demonstrates practical implementation of:
-- full stack web development
-- REST API architecture
-- JWT authentication
-- MongoDB database integration
-- AI-assisted recommendation systems
-- responsive frontend development
-- analytics and visualization
+* Managing multiple subjects simultaneously
+* Planning studies before examinations
+* Tracking assignments and deadlines
+* Revising topics effectively
+* Identifying weak areas
+* Maintaining study consistency
+* Finding personalized academic guidance
 
---------------------------------------------------
+StudyFlow AI Agent combines traditional productivity tools with Artificial Intelligence to create a unified study management system.
 
-FEATURES
+Instead of using separate applications for task management, revision tracking, scheduling, and academic assistance, students can manage everything from one platform.
 
-1. Authentication System
-- User registration
-- Secure login/logout
-- JWT-based authentication
-- Protected routes
-- Persistent sessions
-- User-specific dashboards
+---
 
-2. Task Management
-- Create study tasks
-- Update tasks
-- Delete tasks
-- Mark tasks as completed
-- Assign priorities
-- Add deadlines
-- Add estimated study hours
-- Categorize by subject
-- Difficulty tracking
-- Filter and search tasks
+# 🎯 Problem Statement
 
-3. AI Recommendation Engine
-The platform includes a rule-based AI productivity engine that:
-- prioritizes urgent tasks
-- detects overdue work
-- recommends study focus areas
-- balances workload
-- identifies difficult subjects
-- generates personalized study suggestions
+Students often face problems such as:
 
-AI recommendation logic considers:
-- task priority
-- task difficulty
-- deadline proximity
-- completion status
-- overdue tasks
+### Poor Time Management
 
-4. Analytics Dashboard
-Interactive dashboard includes:
-- total task count
-- completed tasks
-- pending tasks
-- overdue tasks
-- completion percentage
-- subject-wise distribution
-- productivity charts
-- task timeline visualization
-- upcoming deadlines
-- recent tasks
+Students know what to study but often do not know when to study it.
 
-5. Responsive UI
-- Modern professional interface
-- Mobile responsive layout
-- Shared app shell
-- Sidebar navigation
-- Dashboard analytics cards
-- Interactive charts
+### Lack of Structured Planning
 
---------------------------------------------------
+Study schedules are usually created manually and are difficult to maintain.
 
-TECH STACK
+### Ineffective Revision
 
-Frontend:
-- React.js
-- Vite
-- Tailwind CSS
-- React Router DOM
-- Axios
-- Recharts
-- React Hot Toast
-- Lucide React Icons
+Students frequently forget previously learned concepts due to inconsistent revision habits.
 
-Backend:
-- Node.js
-- Express.js
-- JWT Authentication
-- REST APIs
-- Middleware architecture
+### Overwhelming Workload
 
-Database:
-- MongoDB Atlas
-- Mongoose ODM
+Managing assignments, exams, projects, and multiple subjects simultaneously can become overwhelming.
 
---------------------------------------------------
+### Lack of Personalized Guidance
 
-PROJECT STRUCTURE
+Most productivity applications provide generic suggestions rather than recommendations tailored to individual academic needs.
 
-AI-Study-Planner/
+StudyFlow AI Agent addresses these challenges by combining planning, tracking, analytics, and AI-powered guidance into a single system.
 
-client/
-- src/
-  - components/
-  - context/
-  - pages/
-  - services/
-  - App.jsx
-  - main.jsx
+---
 
-server/
-- config/
-- controllers/
-- middleware/
-- models/
-- routes/
-- server.js
+# ✨ Key Features
 
-README.md
-.gitignore
+---
 
---------------------------------------------------
+## 🔐 Authentication System
 
-DATABASE MODELS
+Secure authentication system for personalized study management.
 
-User Model:
-- name
-- email
-- password
-- timestamps
+### Features
 
-Task Model:
-- user
-- title
-- subject
-- description
-- deadline
-- estimatedHours
-- difficulty
-- priority
-- status
-- timestamps
+* User Registration
+* User Login
+* JWT Authentication
+* Protected Routes
+* Persistent Login Sessions
 
---------------------------------------------------
+### Benefits
 
-API ENDPOINTS
+Each student maintains a separate workspace, study plans, tasks, and revision history.
 
-Authentication Routes:
-- POST /api/auth/register
-- POST /api/auth/login
+---
 
-Task Routes:
-- GET /api/tasks
-- POST /api/tasks
-- PUT /api/tasks/:id
-- DELETE /api/tasks/:id
-- GET /api/tasks/stats
+## 📊 Dashboard Analytics
 
-Recommendation Routes:
-- GET /api/recommendations
+The dashboard serves as the central overview of academic productivity.
 
---------------------------------------------------
+### Dashboard Displays
 
-ENVIRONMENT VARIABLES
+* Total Tasks
+* Completed Tasks
+* Pending Tasks
+* Completion Rate
+* Subject Distribution
+* Task Timeline
+* AI Recommendations
+* Upcoming Deadlines
+* Recent Activities
 
-Server .env
+### Benefits
 
+Provides instant insight into study progress and workload distribution.
+
+---
+
+## ✅ Task Management System
+
+Comprehensive task management functionality.
+
+### Create Tasks
+
+Students can create tasks with:
+
+* Title
+* Description
+* Subject
+* Priority
+* Deadline
+* Status
+
+### Manage Tasks
+
+Students can:
+
+* View tasks
+* Edit tasks
+* Delete tasks
+* Update progress
+* Organize by subject
+
+### Task Statuses
+
+* Pending
+* In Progress
+* Completed
+
+### Benefits
+
+Helps students stay organized and prevents missing important deadlines.
+
+---
+
+## 🤖 AI-Powered Recommendations
+
+The system automatically analyzes tasks and deadlines to generate recommendations.
+
+### Recommendation Factors
+
+* Task Priority
+* Deadline Urgency
+* Completion Status
+* Workload Distribution
+
+### Example Recommendations
+
+* Complete high-priority assignments first
+* Focus on approaching deadlines
+* Allocate more time to difficult subjects
+* Balance workload across subjects
+
+### Benefits
+
+Provides actionable guidance without requiring manual analysis.
+
+---
+
+## 📚 Study Plan Generator
+
+The Study Plan Generator creates personalized academic schedules.
+
+### Input Parameters
+
+Students provide:
+
+* Exam Name
+* Exam Date
+* Daily Study Hours
+* Subjects
+* Weak Topics
+* Syllabus Information
+
+### Generated Output
+
+The system automatically generates:
+
+* Subject-wise priorities
+* Daily study schedules
+* Study sessions
+* Topic distribution
+* Revision allocation
+
+### Benefits
+
+Eliminates manual study planning and improves preparation efficiency.
+
+---
+
+## 📅 Study Session Management
+
+Generated study plans are divided into structured study sessions.
+
+### Session Information
+
+Each session contains:
+
+* Subject
+* Focus Area
+* Planned Date
+* Duration
+* Status
+
+### Session Tracking
+
+Students can:
+
+* Mark Completed
+* Mark Missed
+* Reset Status
+
+### Benefits
+
+Provides measurable progress tracking and accountability.
+
+---
+
+## 🔄 Adaptive Replanning
+
+StudyFlow supports dynamic plan recalculation.
+
+### Features
+
+* Recalculate study schedules
+* Adjust plans after missed sessions
+* Update study priorities
+
+### Benefits
+
+Allows plans to remain realistic and adaptive to changing circumstances.
+
+---
+
+## 📝 Revision Assistant
+
+The Revision Assistant helps students maintain consistent revision habits.
+
+### Features
+
+* Track revision topics
+* Monitor revision progress
+* View revision history
+* Generate revision suggestions
+* Identify pending revisions
+
+### Benefits
+
+Supports long-term retention through systematic revision tracking.
+
+---
+
+## 🤖 StudyFlow AI Assistant
+
+StudyFlow includes an AI-powered academic assistant built using Google's Gemini AI.
+
+### Capabilities
+
+#### Concept Explanation
+
+Examples:
+
+* Explain DBMS normalization
+* Explain operating system scheduling
+* Explain machine learning basics
+
+#### Study Planning
+
+Examples:
+
+* Create a 7-day DBMS revision plan
+* Generate a 14-day DSA preparation schedule
+* Build a timetable for 3 study hours daily
+
+#### Exam Preparation
+
+Examples:
+
+* How should I prepare for my DBMS exam?
+* What topics should I prioritize for DSA interviews?
+
+#### Productivity Guidance
+
+Examples:
+
+* How can I avoid procrastination?
+* How can I improve study consistency?
+
+### Features
+
+* Natural language conversations
+* Markdown-formatted responses
+* Structured study plans
+* Personalized guidance
+
+### Benefits
+
+Provides instant academic support without leaving the platform.
+
+---
+
+## 🌙 Dark Mode Support
+
+The platform includes a dark mode interface.
+
+### Benefits
+
+* Reduced eye strain
+* Better nighttime usability
+* Improved user experience
+
+---
+
+# 🏗 System Architecture
+
+Frontend (React + Vite)
+↓
+REST API (Express.js)
+↓
+MongoDB Atlas
+↓
+Gemini AI Services
+
+---
+
+# 💻 Technology Stack
+
+## Frontend
+
+* React.js
+* Vite
+* Tailwind CSS
+* React Router DOM
+* Axios
+* Recharts
+* React Markdown
+* React Hot Toast
+
+---
+
+## Backend
+
+* Node.js
+* Express.js
+
+---
+
+## Database
+
+* MongoDB Atlas
+* Mongoose
+
+---
+
+## Authentication
+
+* JWT (JSON Web Tokens)
+
+---
+
+## Artificial Intelligence
+
+* Google Gemini API
+* Gemini 2.5 Flash Model
+
+---
+
+# 👨‍🎓 Intended Users
+
+StudyFlow AI Agent is designed for:
+
+### Students
+
+* School Students
+* College Students
+* University Students
+
+### Competitive Exam Aspirants
+
+* GATE
+* CAT
+* UPSC
+* Government Exams
+
+### Self Learners
+
+* Online Course Learners
+* Certification Learners
+* Skill Development Enthusiasts
+
+---
+
+# 🚀 Installation Guide
+
+## Step 1: Clone Repository
+
+```bash
+git clone <repository-url>
+cd StudyFlow-AI-Agent
+```
+
+## Step 2: Install Frontend Dependencies
+
+```bash
+cd client
+npm install
+```
+
+## Step 3: Install Backend Dependencies
+
+```bash
+cd ../server
+npm install
+```
+
+## Step 4: Configure Environment Variables
+
+Create a `.env` file inside the `server` folder.
+
+```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
+MONGO_URI=YOUR_MONGODB_CONNECTION_STRING
+JWT_SECRET=YOUR_SECRET_KEY
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+```
 
-Client .env
+---
 
-VITE_API_URL=http://localhost:5000
+## Step 5: Start Backend
 
---------------------------------------------------
-
-INSTALLATION AND SETUP
-
-1. Clone Repository
-
-git clone https://github.com/your-username/ai-study-planner.git
-
-2. Install Frontend Dependencies
-
-cd client
-npm install
-
-3. Install Backend Dependencies
-
-cd server
-npm install
-
---------------------------------------------------
-
-RUNNING THE APPLICATION
-
-Start Backend Server:
-
+```bash
 cd server
 npm run dev
+```
 
-Backend runs on:
-http://localhost:5000
+---
 
-Start Frontend:
+## Step 6: Start Frontend
 
+```bash
 cd client
 npm run dev
+```
 
-Frontend runs on:
-http://localhost:5173
+---
 
---------------------------------------------------
+# 📁 Project Structure
 
-AUTHENTICATION FLOW
+```text
+StudyFlow-AI-Agent
+│
+├── client
+│   ├── src
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── services
+│   │   ├── context
+│   │   └── assets
+│
+├── server
+│   ├── controllers
+│   ├── routes
+│   ├── middleware
+│   ├── services
+│   ├── models
+│   ├── config
+│   └── utils
+│
+├── README.md
+├── FUTURE_SCOPE.md
+└── LICENSE
+```
 
-1. User registers or logs in
-2. JWT token is generated
-3. Token is stored in localStorage
-4. Protected routes verify authentication
-5. Authorized requests include Bearer token
+---
 
---------------------------------------------------
+# 🔒 Security Features
 
-AI RECOMMENDATION LOGIC
+* JWT Authentication
+* Protected API Routes
+* Password Protection
+* Secure User Sessions
+* Environment Variable Management
 
-The recommendation engine calculates task priority using:
-- urgency
-- deadline proximity
-- difficulty level
-- completion status
-- overdue detection
+---
 
-Tasks are scored dynamically to generate intelligent study recommendations.
+# 📈 Current Version
 
---------------------------------------------------
+## StudyFlow AI v1.0
 
-DASHBOARD ANALYTICS
+### Included Features
 
-The dashboard provides:
-- task completion tracking
-- subject distribution analysis
-- productivity visualization
-- overdue task detection
-- upcoming deadline monitoring
-- study workload insights
+* Authentication
+* Dashboard Analytics
+* Task Management
+* AI Recommendations
+* Study Plan Generator
+* Study Session Tracking
+* Revision Assistant
+* Gemini AI Chat Assistant
+* Dark Mode Support
 
---------------------------------------------------
+---
 
-SECURITY FEATURES
+# 🛣 Roadmap
 
-- Password hashing using bcrypt
-- JWT authentication
-- Protected API routes
-- User-specific task isolation
-- Secure middleware validation
-- Environment variable protection
+Future development plans are available in:
 
---------------------------------------------------
+```text
+FUTURE_SCOPE.md
+```
 
-FUTURE ENHANCEMENTS
+---
 
-Potential future improvements:
-- Pomodoro timer
-- Calendar integration
-- Email notifications
-- Mobile application
-- Machine learning recommendations
-- Dark mode
-- Exam preparation mode
-- Study streak tracking
-- Collaborative study groups
-- Voice assistant integration
-- Cloud deployment optimization
+# 🤝 Contribution
 
---------------------------------------------------
+Contributions, feature suggestions, bug reports, and improvements are welcome.
 
-DEPLOYMENT PLAN
+Future versions will continue expanding StudyFlow into a complete AI-powered academic productivity ecosystem.
 
-Frontend Deployment:
-- Vercel
+---
 
-Backend Deployment:
-- Render
+# 👩‍💻 Author
 
-Database:
-- MongoDB Atlas
+**Varnika Sharma**
 
+B.Tech Computer Science Engineering
 
---------------------------------------------------
+Lovely Professional University
 
-LEARNING OUTCOMES
+---
 
-This project demonstrates:
-- full stack development
-- frontend/backend integration
-- REST API development
-- JWT authentication
-- MongoDB database design
-- responsive UI development
-- analytics dashboard creation
-- AI-assisted recommendation systems
-- deployment-ready architecture
+# 📄 License
 
---------------------------------------------------
-
-AUTHOR
-
-Varnika Sharma
-B.Tech CSE (Data Science Specialization)
-
---------------------------------------------------
-
-LICENSE
-
-This project is intended for educational, portfolio, and internship demonstration purposes.
-
+This project is intended for educational, academic, and research purposes.
