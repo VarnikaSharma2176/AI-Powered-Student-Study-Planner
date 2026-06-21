@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import { useEffect, useMemo, useState } from "react";
 import { chatWithAgent } from "../services/agentService";
 import { toast } from "react-hot-toast";
@@ -194,7 +195,7 @@ const [chatLoading, setChatLoading] = useState(false);
           </p>
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+        <div className="mt-6 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
               Plan input
@@ -489,7 +490,9 @@ const [chatLoading, setChatLoading] = useState(false);
                 )}
               </div>
             </div>
-          <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+          </div>
+        </div>
+        <div className="mt-8 rounded-3xl border border-slate-100 bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-slate-900">
   <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
     StudyFlow AI Assistant
   </h2>
@@ -498,17 +501,19 @@ const [chatLoading, setChatLoading] = useState(false);
     Ask anything about your studies, revision, timetable or exam preparation.
   </p>
 
-  <div className="mt-6 space-y-4 max-h-96 overflow-y-auto">
+  <div className="mt-6 h-64 overflow-y-auto space-y-4 rounded-2xl border border-slate-200 p-4 dark:border-slate-700">
     {messages.map((message, index) => (
       <div
         key={index}
         className={
           message.role === "user"
-            ? "rounded-2xl bg-indigo-600 p-4 text-white"
-            : "rounded-2xl bg-slate-100 p-4 dark:bg-slate-800"
+            ? "ml-auto max-w-[75%] rounded-2xl bg-indigo-600 p-4 text-white whitespace-pre-wrap"
+            : "max-w-[75%] rounded-2xl bg-slate-100 p-4 dark:bg-slate-800 whitespace-pre-wrap"
         }
       >
+        <ReactMarkdown>
         {message.text}
+        </ReactMarkdown>
       </div>
     ))}
 
@@ -535,8 +540,6 @@ const [chatLoading, setChatLoading] = useState(false);
     </button>
   </div>
 </div>
-          </div>
-        </div>
       </div>
     </div>
   );

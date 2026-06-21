@@ -14,7 +14,24 @@ export const generateAIResponse = async (prompt) => {
     });
 
     // Generate response
-    const result = await model.generateContent(prompt);
+    const enhancedPrompt = `
+    You are StudyFlow AI Assistant.
+
+    Rules:
+    - Use headings.
+    - Use bullet points.
+    - Use numbered lists where appropriate.
+    - Keep paragraphs short.
+    - Never return one long block of text.
+    - Make answers easy for students to read.
+
+    Student Question:
+    ${prompt}
+    `;
+
+    const result = await model.generateContent(
+      enhancedPrompt
+    );
 
     // Return AI text
     return result.response.text();
