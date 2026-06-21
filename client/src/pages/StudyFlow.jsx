@@ -151,7 +151,30 @@ export default function StudyFlow() {
   const planDoc = studyData.planDoc;
   const sessions = studyData.sessions || [];
   const [prompt, setPrompt] = useState("");
-const [messages, setMessages] = useState([]);
+const [messages, setMessages] = useState([{
+    role: "assistant",
+    text: `# 👋 Welcome to StudyFlow AI
+
+I'm your personal study assistant.
+
+I can help you with:
+
+- Creating study plans
+- Building revision schedules
+- Explaining difficult concepts
+- Exam preparation strategies
+- Time management and productivity
+- Subject-wise learning guidance
+
+### Try asking:
+
+- Create a 7-day DBMS revision plan
+- Explain normalization in simple terms
+- How should I prepare for my DSA exam?
+- Give me a study timetable for 3 hours daily
+
+What would you like help with today?`
+  }]);
 const [chatLoading, setChatLoading] = useState(false);
   const handleSend = async () => {
   if (!prompt.trim()) return;
