@@ -24,6 +24,60 @@ Instead of using separate applications for task management, revision tracking, s
 
 ---
 
+## 🌐 Live Demo
+
+### Frontend Application
+
+https://studyflow-ai-frontend.onrender.com
+
+### Backend API
+
+https://studyflow-ai-backend-xg0u.onrender.com
+
+---
+
+## 🚀 Deployment
+
+StudyFlow AI Agent is deployed and publicly accessible using:
+
+* Frontend Hosting: Render Static Site
+* Backend Hosting: Render Web Service
+* Database: MongoDB Atlas
+* AI Integration: Google Gemini API
+
+The application supports:
+
+* User Authentication
+* Task Management
+* AI-Powered Study Plan Generation
+* Revision Tracking
+* Dashboard Analytics
+* Dark/Light Theme
+* Persistent Cloud Storage
+
+---
+
+## 📌 Current Version
+
+**Version:** v1.0.0
+
+**Release Date:** June 2026
+
+**Status:** Stable Production Release
+
+### Release Highlights
+
+* Production deployment completed
+* User authentication system implemented
+* AI study planner integrated with Gemini
+* Revision Assistant launched
+* Dashboard analytics added
+* Responsive user interface completed
+* MongoDB Atlas cloud integration configured
+* Public release published on GitHub
+
+---
+
 # 🎯 Problem Statement
 
 Students often face problems such as:
