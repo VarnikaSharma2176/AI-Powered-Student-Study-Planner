@@ -16,7 +16,7 @@ export const getAgentInsights = async () => {
 };
 
 export const updateStudySessionStatus = async (sessionId, status) => {
-  const { data } = await API.patch(`/api/agent/session/${sessionId}/status`, {
+  const { data } = await API.patch(`/api/agent/session/${sessionId}`, {
     status,
   });
   return data;
