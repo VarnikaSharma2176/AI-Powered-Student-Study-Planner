@@ -6,7 +6,7 @@ export const generateStudyPlan = async (payload) => {
 };
 
 export const getLatestStudyPlan = async () => {
-  const { data } = await API.get("/api/agent/plan/latest");
+  const { data } = await API.get("/api/agent/latest");
   return data;
 };
 
