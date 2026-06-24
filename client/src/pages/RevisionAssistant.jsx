@@ -188,6 +188,62 @@ export default function RevisionAssistant() {
           )}
 
         </div>
+                <div className="mt-8 rounded-3xl bg-white dark:bg-slate-900 shadow p-6">
+
+          <h2 className="text-2xl font-semibold mb-6 dark:text-white">
+            Revision History
+          </h2>
+
+          {logs.length === 0 ? (
+            <p className="text-slate-500">
+              No revision history available.
+            </p>
+          ) : (
+            <div className="space-y-4">
+
+              {logs.map((item) => (
+
+                <div
+                  key={item._id}
+                  className="rounded-2xl border p-5 dark:border-slate-700"
+                >
+
+                  <h3 className="font-semibold text-lg dark:text-white">
+                    {item.subject}
+                  </h3>
+
+                  <p className="text-slate-500">
+                    {item.focusArea || "General Revision"}
+                  </p>
+
+                  <div className="mt-3 grid md:grid-cols-2 gap-3">
+
+                    <p>
+                      Memory Score: {item.memoryScore}
+                    </p>
+
+                    <p>
+                      Confidence: {item.confidence}
+                    </p>
+
+                    <p>
+                      Priority: {item.priority}
+                    </p>
+
+                    <p>
+                      Status: {item.status}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              ))}
+
+            </div>
+          )}
+
+        </div>
 
       </div>
 
