@@ -345,6 +345,8 @@ export const updateRevisionAfterCompletion = (
   log.lastRevisionDate =
     new Date();
 
+    log.status = "completed";
+    
   log.nextRevisionDate =
     calculateNextRevisionDate(
       log.revisionCount,
@@ -445,12 +447,10 @@ export const updateRevisionAfterMiss = (
 |--------------------------------------------------------------------------
 */
 
-export const shouldSuggestRevision = (
-  revisionLog
-) => {
+export const shouldSuggestRevision = (revisionLog) => {
   return (
-    new Date(revisionLog.nextRevisionDate) <=
-    new Date()
+    revisionLog.status !== "completed" &&
+    new Date(revisionLog.nextRevisionDate) <= new Date()
   );
 };
 

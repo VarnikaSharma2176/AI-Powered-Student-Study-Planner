@@ -692,7 +692,15 @@ export const getRevisionSuggestions = async (req, res) => {
     const revisionLogs = await RevisionLog.find({
       user: req.user._id,
     });
+    console.log("===== Revision Logs =====");
 
+    revisionLogs.forEach((log) => {
+      console.log({
+        subject: log.subject,
+        status: log.status,
+        nextRevisionDate: log.nextRevisionDate,
+      });
+    });
     const suggestions = revisionLogs
       .filter((log) => shouldSuggestRevision(log))
       .map((log) => buildRevisionSuggestion(log));
