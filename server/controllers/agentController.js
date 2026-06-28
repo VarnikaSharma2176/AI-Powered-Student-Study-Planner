@@ -663,8 +663,25 @@ export const replanStudyPlan = async (req, res) => {
 
 export const getRevisionLogs = async (req, res) => {
   try {
+    // Get the latest study plan of the current user
+    const latestPlan = await StudyPlan.findOne({
+      user: req.user._id,
+    }).sort({
+      createdAt: -1,
+    });
+
+    // If no study plan exists
+    if (!latestPlan) {
+      return res.status(200).json({
+        count: 0,
+        revisionLogs: [],
+      });
+    }
+
+    // Get revision logs only for the latest study plan
     const revisionLogs = await RevisionLog.find({
       user: req.user._id,
+      studyPlan: latestPlan._id,
     }).sort({
       nextRevisionDate: 1,
       priority: -1,
@@ -689,18 +706,27 @@ export const getRevisionLogs = async (req, res) => {
 
 export const getRevisionSuggestions = async (req, res) => {
   try {
+    // Get the latest study plan of the current user
+    const latestPlan = await StudyPlan.findOne({
+      user: req.user._id,
+    }).sort({
+      createdAt: -1,
+    });
+
+    // If no study plan exists
+    if (!latestPlan) {
+      return res.status(200).json({
+        count: 0,
+        suggestions: [],
+      });
+    }
+
+    // Get revision logs only for the latest study plan
     const revisionLogs = await RevisionLog.find({
       user: req.user._id,
+      studyPlan: latestPlan._id,
     });
-    console.log("===== Revision Logs =====");
 
-    revisionLogs.forEach((log) => {
-      console.log({
-        subject: log.subject,
-        status: log.status,
-        nextRevisionDate: log.nextRevisionDate,
-      });
-    });
     const suggestions = revisionLogs
       .filter((log) => shouldSuggestRevision(log))
       .map((log) => buildRevisionSuggestion(log));
